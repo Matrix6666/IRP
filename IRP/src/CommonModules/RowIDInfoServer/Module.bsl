@@ -4185,7 +4185,6 @@ Function ExtractData_FromWO(BasisesTable, DataReceiver, AddInfo = Undefined)
 	|	ItemList.Ref.Company AS Company,
 	|	ItemList.ItemKey AS ItemKey,
 	|	ItemList.ItemKey.Item AS Item,
-	|	Value(Enum.InventoryOrigingTypes.OwnStocks) AS InventoryOrigin,
 	|	ItemList.PriceType AS PriceType,
 	|	ItemList.DontCalculateRow AS DontCalculateRow,
 	|	ItemList.Ref.Branch AS Branch,
@@ -9170,8 +9169,8 @@ Function LinkUnlinkDocumentRows(Object, FillingValues) Export
 	AttributeNames_LinkedDocuments = GetAttributeNames_LinkedDocuments();
 	
 	// Refreshable tables on unlink documents
-	TableNames_Refreshable = GetTableNames_Refreshable("SerialLotNumbers");
-	
+	TableNames_Refreshable = GetTableNames_Refreshable();
+
 	UpdatedProperties = New Array();
 	UpdatedRows = New Array();
 
@@ -9703,7 +9702,7 @@ Function JoinAllExtractedData(ArrayOfData)
 	Return Tables;
 EndFunction
 
-Function GetTableNames_Refreshable(Excludings = "")
+Function GetTableNames_Refreshable()
 	NamesArray = New Array();
 	NamesArray.Add("RowIDInfo");
 	NamesArray.Add("TaxList");
@@ -9715,17 +9714,6 @@ Function GetTableNames_Refreshable(Excludings = "")
 	NamesArray.Add("Payments");
 	NamesArray.Add("Materials");
 	NamesArray.Add("SourceOfOrigins");
-	
-	If ValueIsFilled(Excludings) Then
-		ExcludingsArray = StrSplit(Excludings, ",");
-		For Each Name In ExcludingsArray Do
-			Index = NamesArray.Find(TrimAll(Name));
-			If Index <> Undefined Then
-				NamesArray.Delete(Index);
-			EndIf;
-		EndDo;
-	EndIf;
-	
 	Return NamesArray;
 EndFunction
 
